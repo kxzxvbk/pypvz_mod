@@ -353,6 +353,18 @@ class Level(tool.State):
 
         self.setupLittleMenu()
 
+        # Add default plants.
+        self.choose((45, 150), [True, False])
+        self.choose((96, 156), [True, False])
+        self.choose((160, 165), [True, False])
+        self.choose((203, 169), [True, False])
+        self.choose((306, 161), [True, False])
+        self.choose((416, 158), [True, False])
+        self.choose((96, 296), [True, False])
+        self.choose((253, 288), [True, False])
+        self.choose((331, 301), [True, False])
+        self.choose((413, 306), [True, False])
+
     def initChoose(self):
         self.state = c.CHOOSE
         self.panel = menubar.Panel(c.CARDS_TO_CHOOSE, self.map_data[c.INIT_SUN_NAME], self.background_type)
@@ -706,13 +718,13 @@ class Level(tool.State):
         # 检查有没有捡到阳光
         clicked_sun = False
         clicked_cards_or_map = False
-        if not self.drag_plant and not self.drag_shovel and mouse_pos and mouse_click[0]:
-            for sun in self.sun_group:
-                if sun.checkCollision(*mouse_pos):
-                    self.menubar.increaseSunValue(sun.sun_value)
-                    clicked_sun = True
-                    # 播放收集阳光的音效
-                    c.SOUND_COLLECT_SUN.play()
+        for sun in self.sun_group:
+            fake_mouse_pos = [(sun.rect.x + sun.rect.right) // 2, (sun.rect.y + sun.rect.bottom) // 2]
+            if sun.checkCollision(*fake_mouse_pos):
+                self.menubar.increaseSunValue(sun.sun_value)
+                clicked_sun = True
+                # 播放收集阳光的音效
+                c.SOUND_COLLECT_SUN.play()
 
         # 拖动植物或者铲子
         if not self.drag_plant and mouse_pos and mouse_click[0] and not clicked_sun:

@@ -105,6 +105,7 @@ class Control():
         self.state_dict = state_dict
         self.state_name = start_state
         self.state = self.state_dict[self.state_name]
+        self.game_info[c.LEVEL_NUM] = 5
         self.state.startup(self.current_time, self.game_info)
 
     def update(self):
@@ -113,6 +114,10 @@ class Control():
 
         if self.state.done:
             self.flip_state()
+
+        if self.mouse_click[1]:
+            from source.data_collect import save_state
+            save_state(self, print_language_form=True)
             
         self.state.update(self.screen, self.current_time, self.mouse_pos, self.mouse_click)
         self.mouse_pos = None
